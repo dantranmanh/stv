@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <modules>
+        <Tromvia_Nhapsanpham>
+            <version>0.1.1</version>
+        </Tromvia_Nhapsanpham>
+    </modules>
+    <global>
+    	<helpers>
+            <nhapsanpham>
+                <class>Tromvia_Nhapsanpham_Helper</class>
+            </nhapsanpham>
+        </helpers>
+        <models>
+            <nhapsanpham>
+                <class>Tromvia_Nhapsanpham_Model</class>
+            </nhapsanpham>
+        </models>
+        <blocks>
+            <nhapsanpham>
+                <class>Tromvia_Nhapsanpham_Block</class>
+            </nhapsanpham>
+        </blocks>
+		<resources>
+            <nhapsanpham_setup>
+                <setup>
+                    <module>Tromvia_Nhapsanpham</module>
+                    <class>Mage_Catalog_Model_Resource_Eav_Mysql4_Setup</class>
+                </setup>
+                <connection>
+                    <use>core_setup</use>
+                </connection>
+            </nhapsanpham_setup>
+		<nhapsanpham_write>
+		<connection>
+		  <use>core_write</use>
+		</connection>
+	    </nhapsanpham_write>
+	  <nhapsanpham_read>
+		<connection>
+		  <use>core_read</use>
+		</connection>
+	  </nhapsanpham_read>
+        </resources>
+		<events>
+			<sales_order_place_after>
+				<observers>
+					<tromvia_sales_order_observer>
+						<type>singleton</type>
+						<class>nhapsanpham/observer</class>
+						<method>luu_order</method>
+					</tromvia_sales_order_observer>
+				</observers>
+			</sales_order_place_after>
+		</events>
+    </global>
+    <admin>
+		<routers>
+			<adminhtml>
+				<args>
+					<modules>
+						<Tromvia_Nhapsanpham before="Mage_Adminhtml">Tromvia_Nhapsanpham_Adminhtml</Tromvia_Nhapsanpham>
+					</modules>
+				</args>
+			</adminhtml>
+		</routers>
+	</admin>
+    <adminhtml>
+    	<menu>
+            <tromvia>
+            	<title>Shop Trộm Vía</title>
+				<sort_order>9999</sort_order>    
+                <children>
+                	<nhapsanpham translate="title" module="nhapsanpham">
+                		<title>Nhập sản phẩm</title>
+	                    <sort_order>20</sort_order>
+	                    <action>adminhtml/nhapsanpham/</action>	                	
+                	</nhapsanpham>
+                    <chitieu translate="title" module="nhapsanpham">
+                        <title>Quản lý thu chi</title>
+                        <sort_order>10</sort_order>
+                        <action>adminhtml/nhapsanpham/</action>
+                    </chitieu>
+                </children>
+            </tromvia>
+        </menu>
+        <acl>
+            <resources>
+                <all>
+                    <title>Allow Everything</title>
+                </all>
+                <admin>
+                    <children>
+                        <system>
+                            <children>
+                                <config>
+                                    <children>
+                                        <tromvia_nhapsanpham>
+                                            <title>Nhập sản phẩm</title>
+                                            <sort_order>50</sort_order>
+                                        </tromvia_nhapsanpham>
+                                    </children>
+                                </config>
+                            </children>
+                        </system>
+                    </children>
+                </admin>
+            </resources>
+        </acl>
+        <layout>
+            <updates>
+                <deployment>
+                    <file>nhapsanpham.xml</file>
+                </deployment>
+            </updates>
+        </layout>
+    </adminhtml>
+</config>
