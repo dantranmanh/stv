@@ -10,19 +10,6 @@ class Mage_Shell_Categories extends Mage_Shell_Abstract
      */
     public $_rootCategoryName="Default Category";
     public $_rootCategoryId=null;
-
-    /**
-     * @var Parent of top category infor( Name and id)
-     */
-    public $_topCategoryParentName="Default Category";
-    public $_topCategoryParentId=null;
-
-    /**
-     * @var Top cateogory id infor
-     */
-    public $_topCategoryName="MAC Makeup";
-    public $_topCategoryNameUrl="mac-makeup";
-    public $_topCategoryNameId=null;
     /**
      * @var Initting some special list
      */
@@ -46,7 +33,7 @@ class Mage_Shell_Categories extends Mage_Shell_Abstract
 
         $this->showdata('-----------------------------');
         /** create lv2 */
-        /*$this->showdata('creating category level  2 ');
+        $this->showdata('creating category level  2 ');
         $lv2 =$this->getCatByLevel(2);
         foreach($this->_csvList as $catString){
             if($catString['level'] != 2 ) continue;
@@ -56,9 +43,9 @@ class Mage_Shell_Categories extends Mage_Shell_Abstract
             }
             if(!empty($catString['path'])){
                 $this->_lv2[]=$catString['path'];
-                $this->createNewCategory($catString['name'],$this->_topCategoryNameId,'');
+                $this->createNewCategory($catString['name'],$this->_rootCategoryId,$catString['url']);
             }
-        }*/
+        }		
         $this->showdata('-----------------------------');
         /*create lv3*/
         $this->showdata('creating category level  3 ');
@@ -70,9 +57,9 @@ class Mage_Shell_Categories extends Mage_Shell_Abstract
                 continue;
             }
             if(!empty($catString['path'])){
-                $this->_lv3[]=$catString['path'];
-                //$parentId=$this->getCategoryIdByName($catString['parent'],null,null,$catString['parentparent']);
-                $this->createNewCategory($catString['name'],$this->_topCategoryNameId,'');
+                $this->_lv3[]=$catString['path'];				
+                $parentId=$this->getCategoryIdByName($catString['parentname'],$this->getParentPath($catString['path']),null,$catString['parentparent']);
+                $this->createNewCategory($catString['name'],$parentId,$catString['url']);
             }
         }
         $this->showdata('-----------------------------');
@@ -88,7 +75,7 @@ class Mage_Shell_Categories extends Mage_Shell_Abstract
             }
             if(!empty($catString['path'])){
                 $this->_lv4[]=$catString['path'];
-                $parentId=$this->getCategoryIdByName($catString['parentname'],null,null,$catString['parentparent']);
+                $parentId=$this->getCategoryIdByName($catString['parentname'],$this->getParentPath($catString['path']),null,$catString['parentparent']);
                 $this->createNewCategory($catString['name'],$parentId,'');
             }
         }
@@ -106,7 +93,7 @@ class Mage_Shell_Categories extends Mage_Shell_Abstract
             }
             if(!empty($catString['path'])){
                 $this->_lv5[]=$catString['path'];
-                $parentId=$this->getCategoryIdByName($catString['parentname'],null,null,$catString['parentparent']);
+                $parentId=$this->getCategoryIdByName($catString['parentname'],$this->getParentPath($catString['path']),null,$catString['parentparent']);
                 $this->createNewCategory($catString['name'],$parentId,'');
             }
         }
@@ -115,6 +102,11 @@ class Mage_Shell_Categories extends Mage_Shell_Abstract
 
 
     }
+	public function getParentPath($path=''){
+		$arr=explode("|",$path);
+		$arr[count($arr)-1]="";
+		return implode("|",$arr);		
+	}
     public function getImportFilePath(){
         return dirname(__FILE__).DS."data".DS.$this->_csvName;
     }
@@ -139,9 +131,10 @@ class Mage_Shell_Categories extends Mage_Shell_Abstract
                 if(count($categoryArray) > $maxLevel) $maxLevel = count($categoryArray);
                 $parentName=$categoryArray[count($categoryArray)-2];
                 $parentparentName=$categoryArray[count($categoryArray)-3];
-                $list[]=array('path'=>$line[0],'name'=>end($categoryArray),'parentname'=>$parentName,'parentparent'=>$parentparentName,'level'=>count($categoryArray));
+                $list[]=array('url'=>$line[1],'path'=>$line[0],'name'=>end($categoryArray),'parentname'=>$parentName,'parentparent'=>$parentparentName,'level'=>count($categoryArray));
             }
             $this->showdata('max category level in csv file is : '.$maxLevel);
+			$this->log($list,'readcsv.log');
             fclose($file_handle);
         }catch(Exception $e) {
             $this->showdata($e);
@@ -161,6 +154,7 @@ class Mage_Shell_Categories extends Mage_Shell_Abstract
          * init Magento category list
          */
         $this->_nameArray=$this->makeMagentoCategoryNameArray();
+		//$this->log($this->_nameArray,'name.log');
         $this->showdata('-----------------------------');
         $this->showdata('Root category Name is : '. $this->_rootCategoryName);
         /**
@@ -168,29 +162,13 @@ class Mage_Shell_Categories extends Mage_Shell_Abstract
          */
         if(empty($this->_rootCategoryId))
             $this->_rootCategoryId =$this->getRootCategoryIdByName($this->_rootCategoryName);
-            $this->showdata('Root category Id is : '. $this->_rootCategoryId);
-
-        $this->_topCategoryParentId=$this->getCategoryIdByName($this->_topCategoryParentName,null,null);
-
-        if(!$this->_init) return false;
-        $this->showdata('The top category"s parent : '.$this->_topCategoryParentName.' has id = '.$this->_topCategoryParentId);
-
-        if(!empty($this->_topCategoryName)){
-            $this->showdata('Creating Top category name '.$this->_topCategoryName . ' under '.$this->_topCategoryParentName);
-            $this->createTopCategory();
-        }
-        $this->resetMagentoCategoryNameArray();
-        $this->_topCategoryNameId =$this->getCategoryIdByName($this->_topCategoryName,$this->_topCategoryParentId);
-        $this->showdata('Recent created Top category id is : '.$this->_topCategoryNameId);
-
+            $this->showdata('Root category Id is : '. $this->_rootCategoryId);        
         $this->showdata('-----------------------------');
         $this->showdata('Reading csv file');
         $this->_csvList=$this->readCSV();
         return true;
     }
-    public function createTopCategory(){
-        $this->createNewCategory($this->_topCategoryName,$this->_topCategoryParentId,'mac-products-test1');
-    }
+   
     public function getRootCategoryIdByName($name){
         if(empty($name)) return '';
         $category=null;
@@ -204,25 +182,26 @@ class Mage_Shell_Categories extends Mage_Shell_Abstract
             return null;
         }
     }
-    public function getCategoryIdByName($name,$parentId=null,$topCategoryId =null,$parentName=''){
+    public function getCategoryIdByName($name='',$path='',$parentId=null,$parentName=''){
         if(empty($name)) return '';
         $category=null;
         $categories=$this->_nameArray[$name];
-        if(count($categories) > 1){
-            if($this->_topCategoryName == $name || $this->_rootCategoryName == $name ){
-                $this->showdata('Please carefully! There are over 2 categories that have
-            the same name'.$name.' and this script can work wrong with it.
-            Please open this script and update the variable: public $_topCategoryNameParentId ');
-                $this->_init=false;
-                return false;
-            }
+        if(count($categories) > 1){            
             foreach($categories as $cat){
-                if(!empty($parentName)){
-                    if($cat['parentname'] == $parentName)
-                        $category =$cat;
-                }
+				if(!empty($path)){
+                    if($cat['idpath'] == $path || $cat['namepath'] == $path){
+						$category =$cat;
+						break;
+					}                        
+                }              
                 if(!empty($parentId)){
-                    if($cat['parentid'] == $parentId)
+                    if($cat['parentid'] == $parentId){
+						$category =$cat;
+						break;
+					}                        
+                }
+				if(!empty($parentName)){
+                    if($cat['parentname'] == $parentName)
                         $category =$cat;
                 }
             }
@@ -235,8 +214,8 @@ class Mage_Shell_Categories extends Mage_Shell_Abstract
             return null;
         }
     }
-    public function makeMagentoCategoryNameArray($refrest=false){
-        if(!$refrest) $this->showdata('Making category name list');
+    public function makeMagentoCategoryNameArray($refresh=false){
+        if(!$refresh) $this->showdata('Making category name list');
         $category = Mage::getModel('catalog/category');
         $tree = $category->getTreeModel();
         $tree->load();
@@ -247,16 +226,16 @@ class Mage_Shell_Categories extends Mage_Shell_Abstract
                 $cat = Mage::getModel('catalog/category');
                 $cat->load($id);
                 $name = $cat->getName();
-                $path=$cat->getPath();
-               /* if($refrest){
+                $path=$this->getCagetoryPathName($cat);
+               /* if($refresh){
                     $pathArr=explode('/',$path);
                     if(!in_array($this->_topCategoryNameId,$pathArr)) continue;
                 }*/
                 $parentCat=Mage::getModel('catalog/category')->load($cat->getParentId());
-                $data=array('id'=>$id ,'path'=>$path,'originname'=>$name,'parentid' => $cat->getParentId(),'parentname'=>$parentCat->getName(),'level' => $cat->getLevel());
+                $data=array('id'=>$id ,'idpath'=>$cat->getPath(),'namepath'=>$path,'originname'=>$name,'parentid' => $cat->getParentId(),'parentname'=>$parentCat->getName(),'level' => $cat->getLevel());
                 $magentoCat[$name][]=$data;
                 if(count($magentoCat[$name]) > 1){
-                    if(!$refrest) $this->showdata('There are more than '.count($magentoCat[$name]).' categories that have same name : '.$name);
+                    if(!$refresh) $this->showdata('There are more than '.count($magentoCat[$name]).' categories that have same name : '.$name);
                     if(!$refrest)$this->log($magentoCat[$name],'sameCatName.log');
                 }
             }
@@ -272,71 +251,14 @@ class Mage_Shell_Categories extends Mage_Shell_Abstract
         $ids = $tree->getCollection()->getAllIds();
         $list=array();
         if ($ids){
-            foreach ($ids as $id){
-                $catLv1=null;
-                $catLv2=null;
-                $catLv3=null;
-                $catLv4=null;
+            foreach ($ids as $id){                
                 $cat = Mage::getModel('catalog/category');
                 $cat->load($id);
                 $name = $cat->getName();
                 $nameString='';
                 if($cat->getLevel() == $level){
-                    if($level == 8 ) {
-                        $catLv7=Mage::getModel('catalog/category')->load($cat->getParentId());
-                        $catLv6=Mage::getModel('catalog/category')->load($catLv7->getParentId());
-                        $catLv5=Mage::getModel('catalog/category')->load($catLv6->getParentId());
-                        $catLv4=Mage::getModel('catalog/category')->load($catLv5->getParentId());
-                        $catLv3=Mage::getModel('catalog/category')->load($catLv4->getParentId());
-                        $catLv2=Mage::getModel('catalog/category')->load($catLv3->getParentId());
-                        $catLv1=Mage::getModel('catalog/category')->load($catLv2->getParentId());
-                        $nameString=$catLv1->getName()."|".$catLv2->getName()."|".$catLv3->getName()."|".
-                            $catLv4->getName()."|".$catLv5->getName()."|".$catLv6->getName()."|".
-                            $catLv7->getName()."|".$name;
-                    }
-                    if($level == 7 ) {
-                        $catLv6=Mage::getModel('catalog/category')->load($cat->getParentId());
-                        $catLv5=Mage::getModel('catalog/category')->load($catLv6->getParentId());
-                        $catLv4=Mage::getModel('catalog/category')->load($catLv5->getParentId());
-                        $catLv3=Mage::getModel('catalog/category')->load($catLv4->getParentId());
-                        $catLv2=Mage::getModel('catalog/category')->load($catLv3->getParentId());
-                        $catLv1=Mage::getModel('catalog/category')->load($catLv2->getParentId());
-                        $nameString=$catLv1->getName()."|".$catLv2->getName()."|".$catLv3->getName()."|".$catLv4->getName()."|".
-                            $catLv5->getName()."|".$catLv6->getName()."|".$name;
-                    }
-                    if($level == 6 ) {
-                        $catLv5=Mage::getModel('catalog/category')->load($cat->getParentId());
-                        $catLv4=Mage::getModel('catalog/category')->load($catLv5->getParentId());
-                        $catLv3=Mage::getModel('catalog/category')->load($catLv4->getParentId());
-                        $catLv2=Mage::getModel('catalog/category')->load($catLv3->getParentId());
-                        $catLv1=Mage::getModel('catalog/category')->load($catLv2->getParentId());
-                        $nameString=$catLv1->getName()."|".$catLv2->getName()."|".$catLv3->getName()."|".
-                            $catLv4->getName()."|".$catLv5->getName()."|".$name;
-                    }
-                    if($level == 5 ) {
-                        $catLv4=Mage::getModel('catalog/category')->load($cat->getParentId());
-                        $catLv3=Mage::getModel('catalog/category')->load($catLv4->getParentId());
-                        $catLv2=Mage::getModel('catalog/category')->load($catLv3->getParentId());
-                        $catLv1=Mage::getModel('catalog/category')->load($catLv2->getParentId());
-                        $nameString=$catLv1->getName()."|".$catLv2->getName()."|".$catLv3->getName()."|".$catLv4->getName()."|".$name;
-                    }
-                    if($level == 4 ) {
-                        $catLv3=Mage::getModel('catalog/category')->load($cat->getParentId());
-                        $catLv2=Mage::getModel('catalog/category')->load($catLv3->getParentId());
-                        $catLv1=Mage::getModel('catalog/category')->load($catLv2->getParentId());
-                        $nameString=$catLv1->getName()."|".$catLv2->getName()."|".$catLv3->getName()."|".$name;
-                    }
-                    if($level == 3 ) {
-                        $catLv2=Mage::getModel('catalog/category')->load($cat->getParentId());
-                        $catLv1=Mage::getModel('catalog/category')->load($catLv2->getParentId());
-                        $nameString=$catLv1->getName()."|".$catLv2->getName()."|".$name;
-                    }
-                    if($level == 2 ) {
-                        $catLv1=Mage::getModel('catalog/category')->load($cat->getParentId());
-                        $nameString=$catLv1->getName()."|".$name;
-                    }
-                    $list[]=$nameString;
-
+					$namdString=$this->getCagetoryPathName($cat);
+                     $list[]=$nameString;
                 }
             }
         }
@@ -385,7 +307,7 @@ class Mage_Shell_Categories extends Mage_Shell_Abstract
         $string=str_replace("+", "",$string);
         $string=str_replace(" ", "-",$string);
         $string=strtolower($string);
-        $string="mac-".$string;
+        $string="tromvia-".$string;
         return $string;
     }
     /**
@@ -402,12 +324,26 @@ class Mage_Shell_Categories extends Mage_Shell_Abstract
         return false;
     }
     public function showInfor(){
-        $this->showdata('Max level of created categories is 8');
+        $this->showdata('Max level of created categories is NaN');
         $this->showdata('        ');
         $this->showdata('-----------------------------');
         $this->showdata('        ');
     }
-    /**
+	public function getCagetoryPathName($cat = null){
+		if(!$cat) return false;
+		$path=explode("/",$cat->getPath());
+		$string="";$i=0;
+		foreach($path as $id){
+			$category = Mage::getModel('catalog/category')->load($id);
+			if($i==0)
+            $string=$category->getName();
+			else
+				$string=$string."|".$category->getName(); 
+			$i++;
+		}
+		return $string;
+	}
+   /**
  * @param $string
  * @return string
  */
