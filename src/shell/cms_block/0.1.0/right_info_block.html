@@ -1,0 +1,10 @@
+<div class="sidebar_banner"><img src="{{media url="template/grayscale_full_width_free_magento_theme.jpg"}}" alt="Trộm Vía shop" /></div>
+<div class="block" id="facebook_likebox" style="border:none;"></div>
+<script>
+    //<[CDATA[
+    jQuery(window).bind("load resize", function(){
+        var container_width = jQuery('#facebook_likebox').width();
+        jQuery('#facebook_likebox').html('<iframe src="https://www.facebook.com/plugins/likebox.php?href=http%3A%2F%2Fwww.facebook.com%2Fpages%2FMagento-themes-store%2F157897590908425&amp;colorscheme=light&amp;connections=10&amp;stream=false&amp;header=true&amp;height=280&amp;width=' + container_width + '" scrolling="no" frameborder="0" style="border:none; height:280px;width:' + container_width + 'px;" allowTransparency="true"></iframe>');
+    });
+    //]]>
+</script>
