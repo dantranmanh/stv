@@ -9,7 +9,11 @@ h1, h2, h3, h4, h5, h6, .col-main dl dt {
 }
 /*background - color*/
 .nav-container{
-	background-color: #333333;
+	background-color: #cc3399;
+	opacity:0.7;
+}
+.nav-container:hover{	
+	opacity:1;
 }
 .product-options {background-color: #f5f5f5;}
 .tier-prices, .tier-prices .price, .price-box-bundle, .price-box-bundle .price, .error-msg, .success-msg, .note-msg, .notice-msg  {background-color: #d14937; color: #ffffff; }
