@@ -109,6 +109,7 @@ transition: all .1s linear;
 #custommenu div.wp-custom-menu-popup {
 	padding: 0px 0px 10px 0px;
 	border-radius: 0px  3px 3px 0px;
+	min-width:50%;
 }
 #custommenu div.level1 {
     margin-bottom: 5px;
