@@ -23,7 +23,10 @@ a:link, a:visited {
 	text-decoration:none;
 }
 .price, #checkout-review-table tfoot tr.last .price, #product_comparison .price, #shopping-cart-totals-table .price, #shopping-cart-totals-table tfoot .price, .product-view .product-shop .full-product-price .price, .product-essential .price-as-configured .price, .block .regular-price .price, .block .regular-price, .data-table td.last .price,  label.required em, a.more:hover,  .form-search .search-autocomplete li:hover,  h2.desc_head, #checkout-review-table td.last .price, a.level1:link, a.level1:visited, .menu-mobile a:active, div.tabs_block h5 a:link, div.tabs_block h5 a:active, div.tabs_block h5 a:visited, div.tabs_info a:link, div.tabs_info a:active, div.tabs_info a:visited {
-	color: #000;
+	color: #cc3399;
+}
+.itemMenu .itemMenuName:hover{
+	color: #660066;
 }
 a:hover, div.menu a:hover, a.level1:hover,
 a.level2:hover, a.level3:hover  {
