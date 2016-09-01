@@ -7,12 +7,17 @@ Default Category|Thời trang trẻ em|Trẻ sơ sinh|Tã bỉm,ta-bim
 Default Category|Thời trang trẻ em|Trẻ sơ sinh|Đồ ăn dặm,do-an-dam
 Default Category|Thời trang trẻ em|Đồ chơi trẻ em,do-choi-tre-em
 Default Category|Thời trang trẻ em|Phụ kiện,phu-kien
-Default Category|Thời trang trẻ em|Phụ kiện|Nam,nam
-Default Category|Thời trang trẻ em|Phụ kiện|Nữ,nu
+Default Category|Thời trang trẻ em|Phụ kiện|Bé trai,con-trai
+Default Category|Thời trang trẻ em|Phụ kiện|Bé gái,con-gai
 Default Category|Thời trang trẻ em|Thời trang của bé,thoi-trang-cua-be
-Default Category|Thời trang trẻ em|Thời trang của bé|Nam,be-nam
-Default Category|Thời trang trẻ em|Thời trang của bé|Nữ,be-nu
+Default Category|Thời trang trẻ em|Thời trang của bé|Bé trai,be-trai
+Default Category|Thời trang trẻ em|Thời trang của bé|Bé gái,be-gai
 
-Default Category|Đồ sơ sinh
-Default Category|Phụ kiện
-Default Category|Giảm giá
+Default Category|Đồ sơ sinh,do-ss
+Default Category|Đồ sơ sinh|Quần áo,do-ss-quan-ao
+Default Category|Đồ sơ sinh|Đồ dùng chăm sóc sơ sinh,do-ss-do-cham-soc
+Default Category|Đồ sơ sinh|Tã bỉm sữa,do-ss-ta-bim-sua
+Default Category|Phụ kiện,phu-kien-thoi-trang
+Default Category|Phụ kiện|Phụ kiện bé trai,phu-kien-thoi-trang-be-trai
+Default Category|Phụ kiện|Phụ kiện bé gái,phu-kien-thoi-trang-be-gai
+Default Category|Giảm giá,hang-giam-gia
