@@ -33,10 +33,11 @@ class Mage_Shell_Compiler extends Mage_Shell_Abstract
                      $j++;
                  }
                  if(empty($shortDescription)){
+                     $product->setShortDescription($product->getName());
                      $this->showdata('updated Short Description for : '.$product->getName());
                      if($j == 0) $i++;
                  }
-
+                $product->save();
                 $this->showdata('updated description/short description for : '.$i.' products');
             }
     }
