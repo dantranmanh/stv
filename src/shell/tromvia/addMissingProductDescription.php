@@ -22,6 +22,7 @@ class Mage_Shell_Compiler extends Mage_Shell_Abstract
 			$this->showdata('there are '.count($collection).' product');
 			$i=0;
             foreach ($collection as $product) {
+                $product=Mage::getModel('catalog/product')->load($product->getEntityId());
                  $description=$product->getDescription();
                  $shortDescription=$product->getShortDescription();
                  $j=0;
