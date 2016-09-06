@@ -390,7 +390,7 @@ div.tabs_ul li.ui-tabs-selected a:after {
  font-size: 0px;
 }
 /*cutom menu*/
-#menu-button a:link, #menu-button a:visited {
+#wp-nav-container #custommenu-mobile #menu-button a:link, #wp-nav-container #custommenu-mobile #menu-button a:visited {
     margin-left: 40%;
 }
 }
