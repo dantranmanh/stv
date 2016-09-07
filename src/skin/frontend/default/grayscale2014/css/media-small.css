@@ -70,7 +70,7 @@ div.block-cart-top .cart-link a:link, div.block-cart-top .cart-link a:visited {
 }
 .header .quick-access {
  float:left;
- padding-left: 1%;
+ padding-left: 5%;
  width: 99%;
 }
 .header .links {
@@ -84,13 +84,16 @@ div.block-cart-top .cart-link a:link, div.block-cart-top .cart-link a:visited {
  margin: 1% 5% 1% 0%;
 }
 .header .links a:link, .header .links a:visited {
- color: #000;
+ color: #990066;
  text-decoration: none;
  padding: 2px 5px !important;
  border-radius: 3px;
  background: #dadada;
  display: block;
  text-align: center;
+}
+.quick-access .links li{
+	font-size:0.9em;
 }
 div.block-cart-top .cart-link a:hover, .header .links a:hover {
  background: #eaeaea;
@@ -395,4 +398,8 @@ div.tabs_ul li.ui-tabs-selected a:after {
 }
 }
 
-
+@media all and (min-width:380px) and (max-width:479px) {
+.header .quick-access { 
+ padding-left: 12%;
+}
+}

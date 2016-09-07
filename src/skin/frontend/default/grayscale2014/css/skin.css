@@ -293,7 +293,7 @@ background-position: -36px 0px;
 .header .quick-access a:hover{
 	color:#ff9900;
 }
-.header .quick-access a{
+.header .quick-access a, .best_sellers, .catalog-category-view .category-title h1{
 	color:#990066;
 }
 .top_toolbar_container .welcome-msg {
@@ -1918,7 +1918,7 @@ div.menu_image h2 {
     background: #f5f5f5;
     padding: 0.5% 1%;
     margin-bottom: 1%;
-    border-radius: 3px;
+    border-radius: 3px;    
 }
 .category-products {
     margin-bottom: 3%;
